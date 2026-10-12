@@ -1,178 +1,225 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kirim Mediashare Stream</title>
-    <style>
-        body {
-            background-color: #09090d;
-            color: #ffffff;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 15px;
-        }
-        .card {
-            background: #12121a;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-            width: 100%;
-            max-width: 420px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        h2 { margin-top: 0; text-align: center; color: #38bdf8; font-size: 20px; }
-        .form-group { margin-bottom: 14px; }
-        label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #cbd5e1; }
-        input[type="text"], input[type="url"], textarea {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #334155;
-            background: #1e1e2f;
-            color: white;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-        textarea { resize: vertical; height: 60px; }
-        
-        /* Pilihan Reaksi Tombol */
-        .reaction-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .reaction-btn {
-            background: #1e1e2f;
-            border: 2px solid #334155;
-            border-radius: 8px;
-            padding: 10px 0;
-            text-align: center;
-            cursor: pointer;
-            font-size: 20px;
-            transition: all 0.2s;
-        }
-        .reaction-btn:hover { background: #2a2a40; }
-        .reaction-btn.selected {
-            border-color: #38bdf8;
-            background: rgba(56, 189, 248, 0.15);
-        }
-
-        button.submit-btn {
-            width: 100%;
-            padding: 12px;
-            background: #0284c7;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-size: 15px;
-        }
-        button.submit-btn:hover { background: #0369a1; }
-        #status { text-align: center; margin-top: 12px; font-size: 13px; font-weight: 600; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171923">
+<title>Mediashare — SΛN_CH</title>
+<style>
+:root{color-scheme:dark;--bg:#11131a;--panel:#1b1f2a;--line:#343a49;--text:#f2f4f8;--muted:#aab2c2;--accent:#8b9cff;--ok:#8ee0ad;--bad:#ff9a9a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#20263b 0,#11131a 55%);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh;padding:24px 14px}
+main{max-width:620px;margin:0 auto}
+header{text-align:center;margin:12px 0 24px}
+h1{font-size:clamp(1.8rem,6vw,2.5rem);margin:0 0 6px}
+header p{color:var(--muted);margin:0}
+.card{background:rgba(27,31,42,.96);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 18px 50px #0003}
+label,.label{display:block;font-weight:650;margin:15px 0 7px}
+input,textarea{width:100%;background:#11141c;border:1px solid #454c5e;border-radius:10px;padding:12px 13px;color:var(--text);font:inherit;outline:none}
+input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #8b9cff22}
+textarea{resize:vertical;min-height:90px}
+.url-row{display:flex;gap:8px}
+.url-row input{min-width:0;flex:1}
+button{font:inherit;font-weight:700;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#292f40;color:var(--text)}
+button:hover{filter:brightness(1.12)}
+button:disabled{opacity:.55;cursor:wait}
+#checkBtn{white-space:nowrap}
+.reactions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.reaction{padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.reaction span:first-child{font-size:1.55rem}
+.reaction small{font-size:.78rem;color:var(--muted)}
+.reaction[aria-pressed="true"]{border-color:var(--accent);background:#303957;box-shadow:inset 0 0 0 1px var(--accent)}
+#sendBtn{width:100%;margin-top:20px;background:var(--accent);color:#101321;border-color:transparent;padding:13px}
+#feedback{margin-top:14px;border-radius:10px;padding:10px 12px;display:none;white-space:pre-wrap;overflow-wrap:anywhere}
+#feedback.info{display:block;background:#252d42;color:#dce3ff}
+#feedback.ok{display:block;background:#183326;color:var(--ok)}
+#feedback.bad{display:block;background:#3a2228;color:var(--bad)}
+.hint{font-size:.86rem;color:var(--muted);margin:7px 0 0}
+footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
+@media(max-width:420px){body{padding:14px 10px}.card{padding:15px}.url-row{flex-wrap:wrap}.url-row input{flex-basis:100%}#checkBtn{width:100%}.reactions{gap:6px}.reaction small{font-size:.7rem}}
+</style>
 </head>
 <body>
+<main>
+<header>
+  <h1>📺 Mediashare</h1>
+  <p>Kirim video atau gambar untuk livestream San_CH5</p>
+</header>
+<section class="card">
+  <form id="mediashareForm">
+    <label for="username">Nama viewer</label>
+    <input id="username" name="username" maxlength="40" autocomplete="nickname" placeholder="Nama kamu" required>
 
-<div class="card">
-    <h2>🚀 Kirim Mediashare</h2>
-    <form id="mediaForm">
-        <div class="form-group">
-            <label for="username">Nama Kamu:</label>
-            <input type="text" id="username" required placeholder="Contoh: StreamerID">
-        </div>
-        
-        <div class="form-group">
-            <label for="url">Link Media (YouTube, TikTok, Reels, Gambar/GIF):</label>
-            <input type="url" id="url" required placeholder="https://...">
-        </div>
+    <label for="mediaUrl">Link video / gambar</label>
+    <div class="url-row">
+      <input id="mediaUrl" name="url" type="url" maxlength="2048" placeholder="https://..." autocomplete="url" required>
+      <button id="checkBtn" type="button">🔎 Check link</button>
+    </div>
+    <p class="hint">Bisa coba YouTube, TikTok, Instagram Reels, GIF/JPG/PNG, Giphy, Tenor, Streamable, Vimeo, dan link berbagi video lainnya.</p>
 
-        <div class="form-group">
-            <label for="message">Pesan / Catatan (Opsional):</label>
-            <textarea id="message" placeholder="Pesan untuk streamer..."></textarea>
-        </div>
+    <label for="message">Pesan (opsional)</label>
+    <textarea id="message" name="message" maxlength="300" placeholder="Tulis pesan singkat…"></textarea>
 
-        <label>Pilih Reaksi:</label>
-        <div class="reaction-grid">
-            <div class="reaction-btn selected" data-reaction="senyum" title="Senyum">😊</div>
-            <div class="reaction-btn" data-reaction="ketawa" title="Ketawa">😆</div>
-            <div class="reaction-btn" data-reaction="nangis" title="Nangis">😢</div>
-            <div class="reaction-btn" data-reaction="makan" title="Makan">🍜</div>
-        </div>
-        <input type="hidden" id="selectedReaction" value="senyum">
+    <div class="label">Pilih satu reaksi (opsional)</div>
+    <div class="reactions" role="group" aria-label="Reaksi">
+      <button class="reaction" type="button" data-reaction="senyum" aria-pressed="false"><span>😊</span><small>Senyum</small></button>
+      <button class="reaction" type="button" data-reaction="ketawa" aria-pressed="false"><span>😂</span><small>Ketawa</small></button>
+      <button class="reaction" type="button" data-reaction="nangis" aria-pressed="false"><span>😭</span><small>Nangis</small></button>
+      <button class="reaction" type="button" data-reaction="makan" aria-pressed="false"><span>🍜</span><small>Makan</small></button>
+    </div>
 
-        <button type="submit" class="submit-btn" id="submitBtn">Kirim ke Antrian</button>
-    </form>
-    <div id="status"></div>
-</div>
+    <button id="sendBtn" type="submit">Kirim mediashare</button>
+    <div id="feedback" role="status" aria-live="polite"></div>
+  </form>
+</section>
+<footer>Dengan mengirim, kamu menyetujui link dan pesan ditampilkan sesuai moderasi livestream.</footer>
+</main>
 
+<!-- Ganti dua nilai di bawah dengan Project URL dan anon/publishable key Supabase.
+     Jangan pernah menaruh service_role key di GitHub Pages. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // Logika Pemilihan Tombol Reaksi
-    const reactionBtns = document.querySelectorAll('.reaction-btn');
-    const selectedReactionInput = document.getElementById('selectedReaction');
+(() => {
+  "use strict";
 
-    reactionBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            reactionBtns.forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            selectedReactionInput.value = btn.getAttribute('data-reaction');
-        });
+  const SUPABASE_URL = "https://YOUR_PROJECT_REF.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
+  const TABLE = "mediashare";
+
+  const form = document.getElementById("mediashareForm");
+  const username = document.getElementById("username");
+  const urlInput = document.getElementById("mediaUrl");
+  const message = document.getElementById("message");
+  const checkBtn = document.getElementById("checkBtn");
+  const sendBtn = document.getElementById("sendBtn");
+  const feedback = document.getElementById("feedback");
+  const reactionButtons = [...document.querySelectorAll("[data-reaction]")];
+
+  let selectedReaction = null;
+  let checkedUrl = "";
+
+  function showFeedback(text, kind = "info") {
+    feedback.textContent = text;
+    feedback.className = kind;
+  }
+
+  function parseAndRecognizeUrl(value) {
+    let parsed;
+    try { parsed = new URL(value.trim()); }
+    catch { return { ok: false, reason: "Format URL belum benar. Masukkan link lengkap yang diawali https:// atau http://." }; }
+
+    if (!["https:", "http:"].includes(parsed.protocol)) {
+      return { ok: false, reason: "Link harus memakai HTTP atau HTTPS." };
+    }
+    if (!parsed.hostname || !parsed.hostname.includes(".")) {
+      return { ok: false, reason: "Nama domain link tidak valid." };
+    }
+
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+    const imageExt = /\.(gif|jpe?g|png|webp|bmp|avif)$/i.test(parsed.pathname);
+    const known = [
+      "youtube.com", "youtu.be", "youtube-nocookie.com",
+      "tiktok.com", "instagram.com",
+      "giphy.com", "giphy.com", "tenor.com",
+      "imgur.com", "i.imgur.com", "streamable.com",
+      "vimeo.com", "reddit.com", "redd.it",
+      "x.com", "twitter.com", "facebook.com", "fb.watch",
+      "drive.google.com", "dropbox.com", "medal.tv",
+      "clips.twitch.tv", "twitch.tv"
+    ];
+    const supported = imageExt || known.some(d => host === d || host.endsWith("." + d));
+    return {
+      ok: true,
+      url: parsed.href,
+      supported,
+      imageExt,
+      host
+    };
+  }
+
+  checkBtn.addEventListener("click", () => {
+    const result = parseAndRecognizeUrl(urlInput.value);
+    checkedUrl = "";
+    if (!result.ok) {
+      showFeedback("❌ " + result.reason, "bad");
+      return;
+    }
+    checkedUrl = result.url;
+    if (result.imageExt) {
+      showFeedback("✅ Format link terlihat valid dan berakhiran file gambar/GIF. Check ini belum memastikan file masih tersedia.", "ok");
+    } else if (result.supported) {
+      showFeedback("✅ Format URL valid dan domain dikenali (" + result.host + "). Ini belum memastikan video tersedia atau bisa di-embed.", "ok");
+    } else {
+      showFeedback("⚠️ Format URL valid, tetapi domain belum ada di daftar umum. Kamu tetap bisa mengirimnya; video mungkin tidak dapat diputar.", "info");
+    }
+  });
+
+  urlInput.addEventListener("input", () => {
+    if (checkedUrl && urlInput.value.trim() !== checkedUrl) {
+      checkedUrl = "";
+      showFeedback("Link berubah. Tekan Check link lagi sebelum mengirim.", "info");
+    }
+  });
+
+  reactionButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const next = button.dataset.reaction;
+      selectedReaction = selectedReaction === next ? null : next;
+      reactionButtons.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.reaction === selectedReaction)));
     });
+  });
 
-    document.getElementById('mediaForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const username = document.getElementById('username').value;
-        const url = document.getElementById('url').value;
-        const message = document.getElementById('message').value;
-        const reaction = document.getElementById('selectedReaction').value;
-        
-        const statusDiv = document.getElementById('status');
-        const submitBtn = document.getElementById('submitBtn');
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
 
-        submitBtn.disabled = true;
-        statusDiv.style.color = '#fde047';
-        statusDiv.textContent = 'Mengirim data...';
+    const result = parseAndRecognizeUrl(urlInput.value);
+    if (!result.ok) {
+      showFeedback("❌ " + result.reason, "bad");
+      return;
+    }
+    if (checkedUrl !== result.url) {
+      showFeedback("Periksa link dulu dengan tombol Check link sebelum mengirim.", "info");
+      return;
+    }
 
-        try {
-            // Ubah URL di bawah ini dengan URL publik server Node.js kamu (misal: Ngrok URL atau server hosting)
-            const backendUrl = 'https://URL-NGROK-KAMU.ngrok-free.app/api/mediashare';
+    if (SUPABASE_URL.includes("YOUR_PROJECT_REF") || SUPABASE_ANON_KEY.includes("YOUR_SUPABASE")) {
+      showFeedback("Supabase belum dikonfigurasi. Isi SUPABASE_URL dan SUPABASE_ANON_KEY di index.html.", "bad");
+      return;
+    }
+    if (!window.supabase?.createClient) {
+      showFeedback("Library Supabase gagal dimuat. Periksa koneksi internet lalu coba lagi.", "bad");
+      return;
+    }
 
-            const response = await fetch(backendUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, url, message, reaction })
-            });
+    sendBtn.disabled = true;
+    checkBtn.disabled = true;
+    showFeedback("Mengirim mediashare…", "info");
+    try {
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const payload = {
+        username: username.value.trim(),
+        url: result.url,
+        message: message.value.trim(),
+        reaction: selectedReaction
+      };
+      const { error } = await client.from(TABLE).insert(payload);
+      if (error) throw error;
 
-            const result = await response.json();
-
-            if (response.ok) {
-                statusDiv.style.color = '#22c55e';
-                statusDiv.textContent = 'Berhasil! Link masuk antrian.';
-                document.getElementById('mediaForm').reset();
-                // Reset pilihan reaksi ke default
-                reactionBtns.forEach(b => b.classList.remove('selected'));
-                reactionBtns[0].classList.add('selected');
-                selectedReactionInput.value = 'senyum';
-            } else {
-                statusDiv.style.color = '#f43f5e';
-                statusDiv.textContent = result.error || 'Gagal mengirim link.';
-            }
-        } catch (error) {
-            statusDiv.style.color = '#f43f5e';
-            statusDiv.textContent = 'Gagal terhubung ke server (Cek Ngrok/Koneksi).';
-        } finally {
-            submitBtn.disabled = false;
-        }
-    });
+      showFeedback("✅ Kiriman berhasil masuk antrean! Terima kasih.", "ok");
+      form.reset();
+      selectedReaction = null;
+      checkedUrl = "";
+      reactionButtons.forEach(b => b.setAttribute("aria-pressed", "false"));
+    } catch (err) {
+      console.error("[MEDIASHARE]", err);
+      showFeedback("❌ Gagal mengirim. " + (err?.message || "Periksa konfigurasi Supabase dan kebijakan RLS."), "bad");
+    } finally {
+      sendBtn.disabled = false;
+      checkBtn.disabled = false;
+    }
+  });
+})();
 </script>
-
 </body>
 </html>

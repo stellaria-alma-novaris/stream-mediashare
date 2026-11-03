@@ -47,6 +47,11 @@ footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
 </header>
 <section class="card">
   <form id="mediashareForm">
+    <div style="position:absolute; left:-9999px;" aria-hidden="true">
+        <label for="website">Website</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+    
     <label for="username">Nama viewer</label>
     <input id="username" name="username" maxlength="30" autocomplete="nickname" placeholder="Nama kamu" required>
 
@@ -67,6 +72,8 @@ footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
       <button class="reaction" type="button" data-reaction="nangis" aria-pressed="false"><span>😭</span><small>Nangis</small></button>
       <button class="reaction" type="button" data-reaction="makan" aria-pressed="false"><span>🍜</span><small>Makan</small></button>
     </div>
+
+    
 
     <button id="sendBtn" type="submit">Kirim mediashare</button>
     <div id="feedback" role="status" aria-live="polite"></div>
@@ -170,6 +177,20 @@ footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
   });
 
   form.addEventListener("submit", async (event) => {
+    const lastSubmit = localStorage.getItem("mediashare_last_submit");
+    const cooldownMs = 60 * 1000; // 1 menit
+
+    if (lastSubmit && (Date.now() - lastSubmit < cooldownMs)) {
+        const sisaDetik = Math.ceil((cooldownMs - (Date.now() - lastSubmit)) / 1000);
+        showFeedback(`⏳ Tunggu ${sisaDetik} detik lagi sebelum mengirim.`, "bad");
+        return; // Hentikan proses submit
+    }
+
+    if (document.getElementById("website").value !== "") {
+        showFeedback("❌ Pengiriman ditolak.", "bad");
+        return; // Anggap sebagai spam
+    }
+    
     event.preventDefault();
     if (!form.reportValidity()) return;
 
@@ -207,6 +228,7 @@ footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
       if (error) throw error;
 
       showFeedback("✅ Kiriman berhasil masuk antrean! Terima kasih.", "ok");
+      localStorage.setItem("mediashare_last_submit", Date.now());
       form.reset();
       selectedReaction = null;
       checkedUrl = "";

@@ -3,46 +3,130 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#171923">
+<meta name="theme-color" content="#0a0c12">
 <title>Mediashare — SΛN_CH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--bg:#11131a;--panel:#1b1f2a;--line:#343a49;--text:#f2f4f8;--muted:#aab2c2;--accent:#8b9cff;--ok:#8ee0ad;--bad:#ff9a9a}
+:root{
+  color-scheme:dark;
+  --bg:#0a0c12;
+  --bg2:#141827;
+  --panel:#12151f;
+  --panel-edge:#1d2233;
+  --line:#272c3d;
+  --text:#edf0f8;
+  --muted:#8690a8;
+  --signal:#ff4d6d;
+  --signal-dim:#5c2230;
+  --cue:#4dd7ff;
+  --ok:#5fe3a4;
+  --bad:#ff6b73;
+}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at top,#20263b 0,#11131a 55%);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh;padding:24px 14px}
-main{max-width:620px;margin:0 auto}
-header{text-align:center;margin:12px 0 24px}
-h1{font-size:clamp(1.8rem,6vw,2.5rem);margin:0 0 6px}
-header p{color:var(--muted);margin:0}
-.card{background:rgba(27,31,42,.96);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 18px 50px #0003}
-label,.label{display:block;font-weight:650;margin:15px 0 7px}
-input,textarea{width:100%;background:#11141c;border:1px solid #454c5e;border-radius:10px;padding:12px 13px;color:var(--text);font:inherit;outline:none}
-input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #8b9cff22}
-textarea{resize:vertical;min-height:90px}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  min-height:100vh;
+  padding:22px 14px 40px;
+  background:
+    repeating-linear-gradient(115deg, #ffffff06 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse 900px 500px at 50% -8%, var(--bg2) 0%, var(--bg) 60%);
+  color:var(--text);
+  font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+main{max-width:600px;margin:0 auto}
+
+.onair{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px}
+.onair .dot{width:8px;height:8px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 0 #ff4d6d80;animation:pulse 1.8s ease-out infinite}
+.onair span.label{font-size:.72rem;font-weight:700;letter-spacing:.14em;color:var(--signal)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #ff4d6d55}70%{box-shadow:0 0 0 9px #ff4d6d00}100%{box-shadow:0 0 0 0 #ff4d6d00}}
+@media (prefers-reduced-motion: reduce){.onair .dot{animation:none}}
+
+header{text-align:center;margin:0 0 26px}
+h1{
+  font-family:"Space Grotesk",system-ui,sans-serif;
+  font-weight:700;
+  font-size:clamp(1.9rem,7vw,2.6rem);
+  margin:0 0 8px;
+  letter-spacing:-.01em;
+}
+header p{color:var(--muted);margin:0;font-size:.98rem}
+
+.card{
+  position:relative;
+  background:linear-gradient(180deg,#151a28,var(--panel) 40%);
+  border:1px solid var(--panel-edge);
+  border-radius:16px;
+  padding:22px 20px 20px;
+  box-shadow:0 24px 60px -20px #000a;
+}
+.card::before{
+  content:"";
+  position:absolute;top:-1px;left:18px;right:18px;height:3px;
+  background:linear-gradient(90deg,var(--signal),var(--cue));
+  border-radius:0 0 3px 3px;
+}
+
+label,.label{display:block;font-weight:650;margin:16px 0 7px;font-size:.93rem}
+label:first-of-type{margin-top:4px}
+input,textarea{
+  width:100%;background:#0d0f17;border:1px solid #2b3144;border-radius:10px;
+  padding:12px 13px;color:var(--text);font:inherit;outline:none;
+  transition:border-color .15s;
+}
+input::placeholder,textarea::placeholder{color:#565f78}
+input:focus,textarea:focus{border-color:var(--cue);box-shadow:0 0 0 3px #4dd7ff26}
+textarea{resize:vertical;min-height:88px}
+
 .url-row{display:flex;gap:8px}
 .url-row input{min-width:0;flex:1}
-button{font:inherit;font-weight:700;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#292f40;color:var(--text)}
-button:hover{filter:brightness(1.12)}
-button:disabled{opacity:.55;cursor:wait}
-#checkBtn{white-space:nowrap}
+
+button{font:inherit;font-weight:700;cursor:pointer;border:1px solid #2b3144;border-radius:10px;padding:11px 15px;background:#1b2032;color:var(--text)}
+button:hover{border-color:#3a4260}
+button:focus-visible,input:focus-visible,textarea:focus-visible,.reaction:focus-visible{outline:2px solid var(--cue);outline-offset:2px}
+button:disabled{opacity:.5;cursor:wait}
+#checkBtn{white-space:nowrap;color:var(--cue);border-color:#204352}
+
 .reactions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.reaction{padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:2px}
-.reaction span:first-child{font-size:1.55rem}
-.reaction small{font-size:.78rem;color:var(--muted)}
-.reaction[aria-pressed="true"]{border-color:var(--accent);background:#303957;box-shadow:inset 0 0 0 1px var(--accent)}
-#sendBtn{width:100%;margin-top:20px;background:var(--accent);color:#101321;border-color:transparent;padding:13px}
-#feedback{margin-top:14px;border-radius:10px;padding:10px 12px;display:none;white-space:pre-wrap;overflow-wrap:anywhere}
-#feedback.info{display:block;background:#252d42;color:#dce3ff}
-#feedback.ok{display:block;background:#183326;color:var(--ok)}
-#feedback.bad{display:block;background:#3a2228;color:var(--bad)}
-.hint{font-size:.86rem;color:var(--muted);margin:7px 0 0}
-footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
-@media(max-width:420px){body{padding:14px 10px}.card{padding:15px}.url-row{flex-wrap:wrap}.url-row input{flex-basis:100%}#checkBtn{width:100%}.reactions{gap:6px}.reaction small{font-size:.7rem}}
+.reaction{padding:11px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;background:#0d0f17}
+.reaction span:first-child{font-size:1.5rem}
+.reaction small{font-size:.75rem;color:var(--muted)}
+.reaction[aria-pressed="true"]{border-color:var(--signal);background:linear-gradient(180deg,#2a1420,#190f19);box-shadow:inset 0 0 0 1px var(--signal)}
+.reaction[aria-pressed="true"] small{color:var(--text)}
+
+#sendBtn{
+  width:100%;margin-top:22px;border:none;padding:14px;font-size:1.02rem;color:#0a0c12;
+  background:linear-gradient(90deg,var(--signal),#ff7a5c);
+  box-shadow:0 10px 24px -10px #ff4d6d80;
+}
+#sendBtn:hover{filter:brightness(1.07)}
+
+#feedback{margin-top:14px;border-radius:10px;padding:11px 13px;display:none;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.93rem;border:1px solid transparent}
+#feedback.info{display:block;background:#161c2c;color:#c9d3f5;border-color:#242c44}
+#feedback.ok{display:block;background:#0f2219;color:var(--ok);border-color:#1c3d2b}
+#feedback.bad{display:block;background:#2a1216;color:var(--bad);border-color:#45202a}
+
+.hint{font-size:.84rem;color:var(--muted);margin:7px 0 0}
+
+footer{text-align:center;color:var(--muted);font-size:.8rem;margin:22px 0 0;line-height:1.6}
+
+@media(max-width:420px){
+  body{padding:16px 10px 32px}
+  .card{padding:17px 14px}
+  .url-row{flex-wrap:wrap}
+  .url-row input{flex-basis:100%}
+  #checkBtn{width:100%}
+  .reactions{gap:6px}
+  .reaction small{font-size:.68rem}
+}
 </style>
 </head>
 <body>
 <main>
 <header>
-  <h1>📺 Mediashare</h1>
+  <h1>Mediashare</h1>
   <p>Kirim video atau gambar untuk livestream SΛN_CH</p>
 </header>
 <section class="card">
@@ -51,7 +135,7 @@ footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
         <label for="website">Website</label>
         <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
     </div>
-    
+
     <label for="username">Nama viewer</label>
     <input id="username" name="username" maxlength="30" autocomplete="nickname" placeholder="Nama kamu" required>
 
@@ -72,8 +156,6 @@ footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
       <button class="reaction" type="button" data-reaction="nangis" aria-pressed="false"><span>😭</span><small>Nangis</small></button>
       <button class="reaction" type="button" data-reaction="makan" aria-pressed="false"><span>🍜</span><small>Makan</small></button>
     </div>
-
-    
 
     <button id="sendBtn" type="submit">Kirim mediashare</button>
     <div id="feedback" role="status" aria-live="polite"></div>
@@ -190,7 +272,7 @@ footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0}
         showFeedback("❌ Pengiriman ditolak.", "bad");
         return; // Anggap sebagai spam
     }
-    
+
     event.preventDefault();
     if (!form.reportValidity()) return;
 

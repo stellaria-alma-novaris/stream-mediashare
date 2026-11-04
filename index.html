@@ -3,164 +3,192 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0a0c12">
+<meta name="theme-color" content="#0a0e18">
 <title>Mediashare — SΛN_CH</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   color-scheme:dark;
-  --bg:#0a0c12;
-  --bg2:#141827;
-  --panel:#12151f;
-  --panel-edge:#1d2233;
-  --line:#272c3d;
-  --text:#edf0f8;
-  --muted:#8690a8;
-  --signal:#ff4d6d;
-  --signal-dim:#5c2230;
-  --cue:#4dd7ff;
-  --ok:#5fe3a4;
-  --bad:#ff6b73;
+  --bg:#0a0e18;
+  --panel:#111826;
+  --line:#243049;
+  --text:#eef3fa;
+  --muted:#8b96ae;
+  --accent:#48c5ff;
+  --accent-ink:#062536;
+  --ok:#8fd4a0;
+  --bad:#e9808a;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{height:100%}
 body{
   margin:0;
   min-height:100vh;
-  padding:22px 14px 40px;
+  padding:16px 14px;
   background:
-    repeating-linear-gradient(115deg, #ffffff06 0 1px, transparent 1px 3px),
-    radial-gradient(ellipse 900px 500px at 50% -8%, var(--bg2) 0%, var(--bg) 60%);
+    radial-gradient(900px 480px at 50% -12%, #16243d 0%, var(--bg) 55%)
+    var(--bg);
   color:var(--text);
-  font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;
-}
-main{max-width:600px;margin:0 auto}
-
-.onair{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px}
-.onair .dot{width:8px;height:8px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 0 #ff4d6d80;animation:pulse 1.8s ease-out infinite}
-.onair span.label{font-size:.72rem;font-weight:700;letter-spacing:.14em;color:var(--signal)}
-@keyframes pulse{0%{box-shadow:0 0 0 0 #ff4d6d55}70%{box-shadow:0 0 0 9px #ff4d6d00}100%{box-shadow:0 0 0 0 #ff4d6d00}}
-@media (prefers-reduced-motion: reduce){.onair .dot{animation:none}}
-
-header{text-align:center;margin:0 0 26px}
-h1{
-  font-family:"Space Grotesk",system-ui,sans-serif;
-  font-weight:700;
-  font-size:clamp(1.9rem,7vw,2.6rem);
-  margin:0 0 8px;
-  letter-spacing:-.01em;
-}
-header p{color:var(--muted);margin:0;font-size:.98rem}
-
-.card{
+  font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;
+  transition:background .3s,color .3s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   position:relative;
-  background:linear-gradient(180deg,#151a28,var(--panel) 40%);
-  border:1px solid var(--panel-edge);
-  border-radius:16px;
-  padding:22px 20px 20px;
-  box-shadow:0 24px 60px -20px #000a;
 }
-.card::before{
+body::after{
   content:"";
-  position:absolute;top:-1px;left:18px;right:18px;height:3px;
-  background:linear-gradient(90deg,var(--signal),var(--cue));
-  border-radius:0 0 3px 3px;
+  position:fixed;left:0;right:0;bottom:0;height:160px;
+  background:linear-gradient(to top, rgba(255,255,255,.07), rgba(255,255,255,0));
+  pointer-events:none;
 }
+main{width:100%;max-width:400px;position:relative;z-index:1}
 
-label,.label{display:block;font-weight:650;margin:16px 0 7px;font-size:.93rem}
-label:first-of-type{margin-top:4px}
+.ticket{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  transition:background .3s,border-color .3s;
+}
+.ticket-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  padding:16px 18px 2px;
+}
+h1{font-size:1.3rem;font-weight:800;margin:0;letter-spacing:-.01em}
+.chan{font-size:.72rem;font-weight:700;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap;text-decoration:none;transition:border-color .15s,color .15s}
+.chan:hover,.chan:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+.perf{position:relative;height:0;border-top:1px dashed var(--line);margin:14px 0 0}
+.perf::before,.perf::after{content:"";position:absolute;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--bg);transition:background .3s}
+.perf::before{left:-7px}
+.perf::after{right:-7px}
+
+form{padding:16px 18px 14px;display:flex;flex-direction:column;gap:10px}
+
+.field label{display:block;font-size:.78rem;font-weight:650;color:var(--muted);margin:0 0 4px}
 input,textarea{
-  width:100%;background:#0d0f17;border:1px solid #2b3144;border-radius:10px;
-  padding:12px 13px;color:var(--text);font:inherit;outline:none;
-  transition:border-color .15s;
+  width:100%;background:#0e0c13;border:1px solid var(--line);border-radius:9px;
+  padding:10px 11px;color:var(--text);font:inherit;outline:none;
 }
-input::placeholder,textarea::placeholder{color:#565f78}
-input:focus,textarea:focus{border-color:var(--cue);box-shadow:0 0 0 3px #4dd7ff26}
-textarea{resize:vertical;min-height:88px}
+input::placeholder,textarea::placeholder{color:#635c72}
+input:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:50px}
 
-.url-row{display:flex;gap:8px}
+.url-row{display:flex;gap:7px}
 .url-row input{min-width:0;flex:1}
+#mediaUrl.url-ok{border-color:var(--ok);box-shadow:0 0 0 3px #8fd4a01f}
+#mediaUrl.url-bad{border-color:var(--bad);box-shadow:0 0 0 3px #e9808a1f}
 
-button{font:inherit;font-weight:700;cursor:pointer;border:1px solid #2b3144;border-radius:10px;padding:11px 15px;background:#1b2032;color:var(--text)}
-button:hover{border-color:#3a4260}
-button:focus-visible,input:focus-visible,textarea:focus-visible,.reaction:focus-visible{outline:2px solid var(--cue);outline-offset:2px}
-button:disabled{opacity:.5;cursor:wait}
-#checkBtn{white-space:nowrap;color:var(--cue);border-color:#204352}
+button{font:inherit;font-weight:700;cursor:pointer;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--text)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,.reaction:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#checkBtn{padding:0 12px;white-space:nowrap;color:var(--accent);border-color:#1f425c}
+#checkBtn:disabled{opacity:.5;cursor:wait}
 
-.reactions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.reaction{padding:11px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;background:#0d0f17}
-.reaction span:first-child{font-size:1.5rem}
-.reaction small{font-size:.75rem;color:var(--muted)}
-.reaction[aria-pressed="true"]{border-color:var(--signal);background:linear-gradient(180deg,#2a1420,#190f19);box-shadow:inset 0 0 0 1px var(--signal)}
+details.hint{font-size:.78rem;color:var(--muted)}
+details.hint summary{cursor:pointer}
+details.hint p{margin:5px 0 0}
+
+.reactions{display:flex;gap:6px}
+.reaction{flex:1;padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;background:#0e0c13}
+.reaction span{font-size:1.25rem;line-height:1}
+.reaction small{font-size:.66rem;color:var(--muted)}
+.reaction[aria-pressed="true"]{border-color:var(--accent);background:#2a2114}
 .reaction[aria-pressed="true"] small{color:var(--text)}
 
+.agree{display:flex;align-items:flex-start;gap:8px;font-size:.78rem;color:var(--muted);cursor:pointer;margin-top:2px}
+.agree input{width:16px;height:16px;flex:none;margin-top:1px;accent-color:var(--accent)}
+
 #sendBtn{
-  width:100%;margin-top:22px;border:none;padding:14px;font-size:1.02rem;color:#0a0c12;
-  background:linear-gradient(90deg,var(--signal),#ff7a5c);
-  box-shadow:0 10px 24px -10px #ff4d6d80;
+  width:100%;padding:11px;font-size:.95rem;border:none;
+  background:var(--accent);color:var(--accent-ink);
 }
-#sendBtn:hover{filter:brightness(1.07)}
+#sendBtn:disabled{opacity:.55;cursor:wait}
+.hidden{display:none!important}
 
-#feedback{margin-top:14px;border-radius:10px;padding:11px 13px;display:none;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.93rem;border:1px solid transparent}
-#feedback.info{display:block;background:#161c2c;color:#c9d3f5;border-color:#242c44}
-#feedback.ok{display:block;background:#0f2219;color:var(--ok);border-color:#1c3d2b}
-#feedback.bad{display:block;background:#2a1216;color:var(--bad);border-color:#45202a}
+#feedback{margin-top:2px;border-radius:9px;padding:9px 11px;display:none;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.82rem}
+#feedback.info{display:block;background:#1e2230;color:#c9d3f5}
+#feedback.ok{display:block;background:#15271c;color:var(--ok)}
+#feedback.bad{display:block;background:#2c171a;color:var(--bad)}
 
-.hint{font-size:.84rem;color:var(--muted);margin:7px 0 0}
+.thanks{padding:22px 18px 24px;text-align:center}
+.thanks-emoji{font-size:2.6rem;line-height:1}
+.thanks-title{font-size:1.1rem;font-weight:800;margin:8px 0 2px}
+.thanks-msg{font-size:.86rem;color:var(--muted);margin:0 0 16px;line-height:1.5}
+#againBtn{padding:9px 16px;font-size:.84rem;border-color:var(--line);color:var(--muted)}
 
-footer{text-align:center;color:var(--muted);font-size:.8rem;margin:22px 0 0;line-height:1.6}
+footer{text-align:center;color:var(--muted);font-size:.72rem;margin:12px 0 0;line-height:1.5;opacity:.75}
 
-@media(max-width:420px){
-  body{padding:16px 10px 32px}
-  .card{padding:17px 14px}
-  .url-row{flex-wrap:wrap}
-  .url-row input{flex-basis:100%}
-  #checkBtn{width:100%}
-  .reactions{gap:6px}
-  .reaction small{font-size:.68rem}
+/* reaction pastel themes, applied to <body> after a successful send */
+body.theme-senyum{--bg:#eaf2ff;--panel:#ffffff;--text:#223047;--muted:#5b6b85;--accent:#6f9adf;--accent-ink:#0c1c33;--line:#d7e4fa;}
+body.theme-ketawa{--bg:#f3ecff;--panel:#ffffff;--text:#2c2440;--muted:#6b5f88;--accent:#a789e0;--accent-ink:#1c1430;--line:#e3d7fa;}
+body.theme-nangis{--bg:#fff0f5;--panel:#ffffff;--text:#4a2733;--muted:#8a5d6c;--accent:#e18fab;--accent-ink:#3a1420;--line:#f7dbe6;}
+body.theme-makan{--bg:#eefaf0;--panel:#ffffff;--text:#223a28;--muted:#5c7c64;--accent:#6fbf86;--accent-ink:#0f2414;--line:#d7f0dd;}
+
+@media(max-width:360px){
+  .reaction small{display:none}
 }
 </style>
 </head>
 <body>
 <main>
-<header>
-  <h1>Mediashare</h1>
-  <p>Kirim video atau gambar untuk livestream SΛN_CH</p>
-</header>
-<section class="card">
+<div class="ticket" id="ticket">
+  <div class="ticket-head">
+    <h1>Mediashare</h1>
+    <a class="chan" href="https://youtube.com/@san_ch5" target="_blank" rel="noopener noreferrer">SΛN_CH</a>
+  </div>
+  <div class="perf" aria-hidden="true"></div>
+
   <form id="mediashareForm">
     <div style="position:absolute; left:-9999px;" aria-hidden="true">
         <label for="website">Website</label>
         <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
     </div>
 
-    <label for="username">Nama viewer</label>
-    <input id="username" name="username" maxlength="30" autocomplete="nickname" placeholder="Nama kamu" required>
-
-    <label for="mediaUrl">Link video / gambar</label>
-    <div class="url-row">
-      <input id="mediaUrl" name="url" type="url" maxlength="2048" placeholder="https://..." autocomplete="url" required>
-      <button id="checkBtn" type="button">🔎 Check link</button>
-    </div>
-    <p class="hint">Bisa coba YouTube, TikTok, Instagram Reels, GIF/JPG/PNG, Giphy, Tenor, Streamable, Vimeo, dan link berbagi video lainnya.</p>
-
-    <label for="message">Pesan (opsional)</label>
-    <textarea id="message" name="message" maxlength="240" placeholder="Pesan kesan dan sarannya..."></textarea>
-
-    <div class="label">Pilih satu reaksi (opsional)</div>
-    <div class="reactions" role="group" aria-label="Reaksi">
-      <button class="reaction" type="button" data-reaction="senyum" aria-pressed="false"><span>😊</span><small>Senyum</small></button>
-      <button class="reaction" type="button" data-reaction="ketawa" aria-pressed="false"><span>😂</span><small>Ketawa</small></button>
-      <button class="reaction" type="button" data-reaction="nangis" aria-pressed="false"><span>😭</span><small>Nangis</small></button>
-      <button class="reaction" type="button" data-reaction="makan" aria-pressed="false"><span>🍜</span><small>Makan</small></button>
+    <div class="field">
+      <label for="username">Nama viewer</label>
+      <input id="username" name="username" maxlength="30" autocomplete="nickname" placeholder="Nama kamu" required>
     </div>
 
-    <button id="sendBtn" type="submit">Kirim mediashare</button>
+    <div class="field">
+      <label for="mediaUrl">Link video / gambar</label>
+      <div class="url-row">
+        <input id="mediaUrl" name="url" type="url" maxlength="2048" placeholder="youtube.com / tiktok.com / ..." autocomplete="url" required>
+        <button id="checkBtn" type="button">Cek</button>
+      </div>
+      <details class="hint"><summary>Platform yang didukung</summary><p>YouTube, TikTok, IG Reels, GIF/JPG/PNG, Giphy, Tenor, Streamable, Vimeo, dan sejenisnya.</p></details>
+    </div>
+
+    <div class="field">
+      <label for="message">Pesan (opsional)</label>
+      <textarea id="message" name="message" maxlength="360" placeholder="Pesan kesan dan sarannya..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Reaksi (opsional)</label>
+      <div class="reactions" role="group" aria-label="Reaksi">
+        <button class="reaction" type="button" data-reaction="senyum" aria-pressed="false"><span>😊</span><small>Senyum</small></button>
+        <button class="reaction" type="button" data-reaction="ketawa" aria-pressed="false"><span>😂</span><small>Ketawa</small></button>
+        <button class="reaction" type="button" data-reaction="nangis" aria-pressed="false"><span>😭</span><small>Nangis</small></button>
+        <button class="reaction" type="button" data-reaction="makan" aria-pressed="false"><span>🍜</span><small>Makan</small></button>
+      </div>
+    </div>
+
+    <label class="agree">
+      <input type="checkbox" id="agree">
+      <span>Saya setuju link &amp; pesan ini ditampilkan saat live, sesuai moderasi.</span>
+    </label>
+
+    <button id="sendBtn" type="submit" class="hidden">Kirim mediashare</button>
     <div id="feedback" role="status" aria-live="polite"></div>
   </form>
-</section>
+
+  <div class="thanks hidden" id="thanksView">
+    <div class="thanks-emoji" id="thanksEmoji">😊</div>
+    <p class="thanks-title" id="thanksTitle">Terkirim!</p>
+    <p class="thanks-msg" id="thanksMsg">Makasih udah mampir. Sampai ketemu di live berikutnya ✨</p>
+    <button type="button" id="againBtn">Kirim lagi</button>
+  </div>
+</div>
 <footer>Dengan mengirim, kamu menyetujui link dan pesan ditampilkan sesuai moderasi livestream.</footer>
 </main>
 
@@ -175,6 +203,7 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;margin:22px 0 0;line
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1cnFlZWd1YXF5cHhrbGxvY2V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3Njg1MjcsImV4cCI6MjEwNzM0NDUyN30.mR3FwgVEVRLLb9B-v-5wKMbYZ03jCB6hoMpdgozaYvc";
   const TABLE = "mediashare";
 
+  const ticket = document.getElementById("ticket");
   const form = document.getElementById("mediashareForm");
   const username = document.getElementById("username");
   const urlInput = document.getElementById("mediaUrl");
@@ -182,7 +211,21 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;margin:22px 0 0;line
   const checkBtn = document.getElementById("checkBtn");
   const sendBtn = document.getElementById("sendBtn");
   const feedback = document.getElementById("feedback");
+  const agree = document.getElementById("agree");
   const reactionButtons = [...document.querySelectorAll("[data-reaction]")];
+  const thanksView = document.getElementById("thanksView");
+  const thanksEmoji = document.getElementById("thanksEmoji");
+  const thanksTitle = document.getElementById("thanksTitle");
+  const thanksMsg = document.getElementById("thanksMsg");
+  const againBtn = document.getElementById("againBtn");
+
+  const REACTION_META = {
+    senyum: { emoji: "😊", theme: "theme-senyum", note: "Makasih udah mampir." },
+    ketawa: { emoji: "😂", theme: "theme-ketawa", note: "Makasih, semoga beneran lucu ya." },
+    nangis: { emoji: "😭", theme: "theme-nangis", note: "Makasih udah berbagi, peluk dulu." },
+    makan:  { emoji: "🍜", theme: "theme-makan",  note: "Makasih, jangan lupa makan juga." }
+  };
+  const ALL_THEMES = Object.values(REACTION_META).map(m => m.theme);
 
   let selectedReaction = null;
   let checkedUrl = "";
@@ -226,28 +269,46 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;margin:22px 0 0;line
     };
   }
 
-  checkBtn.addEventListener("click", () => {
+  function clearUrlStatus() {
+    urlInput.classList.remove("url-ok", "url-bad");
+  }
+
+  function runCheck() {
     const result = parseAndRecognizeUrl(urlInput.value);
     checkedUrl = "";
+    clearUrlStatus();
     if (!result.ok) {
-      showFeedback("❌ " + result.reason, "bad");
-      return;
+      urlInput.classList.add("url-bad");
+      updateSendVisibility();
+      return result;
     }
     checkedUrl = result.url;
-    if (result.imageExt) {
-      showFeedback("✅ Format link terlihat valid dan berakhiran file gambar/GIF. Check ini belum memastikan file masih tersedia.", "ok");
-    } else if (result.supported) {
-      showFeedback("✅ Format URL valid dan domain dikenali (" + result.host + "). Ini belum memastikan video tersedia atau bisa di-embed.", "ok");
+    if (result.imageExt || result.supported) {
+      urlInput.classList.add("url-ok");
     } else {
-      showFeedback("⚠️ Format URL valid, tetapi domain belum ada di daftar umum. Kamu tetap bisa mengirimnya; video mungkin tidak dapat diputar.", "info");
+      urlInput.classList.add("url-bad");
     }
-  });
+    updateSendVisibility();
+    return result;
+  }
+
+  function updateSendVisibility() {
+    const ready = username.value.trim() !== "" &&
+      checkedUrl !== "" && urlInput.value.trim() === checkedUrl &&
+      agree.checked;
+    sendBtn.classList.toggle("hidden", !ready);
+  }
+
+  checkBtn.addEventListener("click", runCheck);
+
+  username.addEventListener("input", updateSendVisibility);
 
   urlInput.addEventListener("input", () => {
     if (checkedUrl && urlInput.value.trim() !== checkedUrl) {
       checkedUrl = "";
-      showFeedback("Link berubah. Tekan Check link lagi sebelum mengirim.", "info");
+      clearUrlStatus();
     }
+    updateSendVisibility();
   });
 
   reactionButtons.forEach(button => {
@@ -258,22 +319,57 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;margin:22px 0 0;line
     });
   });
 
+  agree.addEventListener("change", () => {
+    if (agree.checked && (!checkedUrl || urlInput.value.trim() !== checkedUrl)) {
+      runCheck();
+    }
+    updateSendVisibility();
+  });
+
+  function setTheme(name) {
+    document.body.classList.remove(...ALL_THEMES);
+    if (name) document.body.classList.add(name);
+  }
+
+  function showThanks() {
+    const meta = REACTION_META[selectedReaction] || REACTION_META.senyum;
+    thanksEmoji.textContent = meta.emoji;
+    thanksTitle.textContent = "Terkirim!";
+    thanksMsg.textContent = meta.note + " Sampai ketemu di live berikutnya ✨";
+    setTheme(meta.theme);
+    form.classList.add("hidden");
+    thanksView.classList.remove("hidden");
+  }
+
+  function backToForm() {
+    thanksView.classList.add("hidden");
+    form.classList.remove("hidden");
+    setTheme(null);
+  }
+
+  againBtn.addEventListener("click", backToForm);
+
   form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
     const lastSubmit = localStorage.getItem("mediashare_last_submit");
     const cooldownMs = 60 * 1000; // 1 menit
-
     if (lastSubmit && (Date.now() - lastSubmit < cooldownMs)) {
-        const sisaDetik = Math.ceil((cooldownMs - (Date.now() - lastSubmit)) / 1000);
-        showFeedback(`⏳ Tunggu ${sisaDetik} detik lagi sebelum mengirim.`, "bad");
-        return; // Hentikan proses submit
+      const sisaDetik = Math.ceil((cooldownMs - (Date.now() - lastSubmit)) / 1000);
+      showFeedback(`⏳ Tunggu ${sisaDetik} detik lagi sebelum mengirim.`, "bad");
+      return;
     }
 
     if (document.getElementById("website").value !== "") {
-        showFeedback("❌ Pengiriman ditolak.", "bad");
-        return; // Anggap sebagai spam
+      showFeedback("❌ Pengiriman ditolak.", "bad");
+      return; // Anggap sebagai spam
     }
 
-    event.preventDefault();
+    if (!agree.checked) {
+      showFeedback("Centang dulu persetujuannya sebelum mengirim.", "info");
+      return;
+    }
+
     if (!form.reportValidity()) return;
 
     const result = parseAndRecognizeUrl(urlInput.value);
@@ -282,7 +378,7 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;margin:22px 0 0;line
       return;
     }
     if (checkedUrl !== result.url) {
-      showFeedback("Periksa link dulu dengan tombol Check link sebelum mengirim.", "info");
+      showFeedback("Periksa link dulu dengan tombol Cek sebelum mengirim.", "info");
       return;
     }
 
@@ -309,12 +405,17 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;margin:22px 0 0;line
       const { error } = await client.from(TABLE).insert(payload);
       if (error) throw error;
 
-      showFeedback("✅ Kiriman berhasil masuk antrean! Terima kasih.", "ok");
       localStorage.setItem("mediashare_last_submit", Date.now());
+      showThanks();
+
       form.reset();
       selectedReaction = null;
       checkedUrl = "";
+      clearUrlStatus();
       reactionButtons.forEach(b => b.setAttribute("aria-pressed", "false"));
+      updateSendVisibility();
+      showFeedback("", "info");
+      feedback.className = "";
     } catch (err) {
       console.error("[MEDIASHARE]", err);
       showFeedback("❌ Gagal mengirim. " + (err?.message || "Periksa konfigurasi Supabase dan kebijakan RLS."), "bad");

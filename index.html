@@ -42,6 +42,8 @@ body::after{
   pointer-events:none;
 }
 main{width:100%;max-width:400px;position:relative;z-index:1}
+@media(min-width:640px){ main{max-width:520px} }
+@media(min-width:1000px){ main{max-width:600px} }
 
 .ticket{
   background:var(--panel);
@@ -52,11 +54,13 @@ main{width:100%;max-width:400px;position:relative;z-index:1}
 }
 .ticket-head{
   display:flex;align-items:baseline;justify-content:space-between;gap:10px;
-  padding:16px 18px 2px;
+  padding:16px 18px 14px;
+  background:linear-gradient(135deg,#cdeeff 0%,#e8f7ff 55%,#ffffff 100%);
+  border-radius:14px 14px 0 0;
 }
-h1{font-size:1.3rem;font-weight:800;margin:0;letter-spacing:-.01em}
-.chan{font-size:.72rem;font-weight:700;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap;text-decoration:none;transition:border-color .15s,color .15s}
-.chan:hover,.chan:focus-visible{color:var(--accent);border-color:var(--accent)}
+h1{font-size:1.3rem;font-weight:800;margin:0;letter-spacing:-.01em;color:#0b2740}
+.chan{font-size:.72rem;font-weight:700;letter-spacing:.06em;color:#0b4a68;border:1px solid #9fd8f5;border-radius:999px;padding:3px 9px;white-space:nowrap;text-decoration:none;transition:border-color .15s,color .15s;background:#ffffffb0}
+.chan:hover,.chan:focus-visible{color:#063a52;border-color:var(--accent)}
 
 .perf{position:relative;height:0;border-top:1px dashed var(--line);margin:14px 0 0}
 .perf::before,.perf::after{content:"";position:absolute;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--bg);transition:background .3s}
@@ -113,10 +117,8 @@ details.hint p{margin:5px 0 0}
 .thanks{padding:22px 18px 24px;text-align:center}
 .thanks-emoji{font-size:2.6rem;line-height:1}
 .thanks-title{font-size:1.1rem;font-weight:800;margin:8px 0 2px}
-.thanks-msg{font-size:.86rem;color:var(--muted);margin:0 0 16px;line-height:1.5}
+.thanks-msg{font-size:.86rem;color:var(--muted);margin:0 0 16px;line-height:1.6;white-space:pre-line}
 #againBtn{padding:9px 16px;font-size:.84rem;border-color:var(--line);color:var(--muted)}
-
-footer{text-align:center;color:var(--muted);font-size:.72rem;margin:12px 0 0;line-height:1.5;opacity:.75}
 
 /* reaction pastel themes, applied to <body> after a successful send */
 body.theme-senyum{--bg:#eaf2ff;--panel:#ffffff;--text:#223047;--muted:#5b6b85;--accent:#6f9adf;--accent-ink:#0c1c33;--line:#d7e4fa;}
@@ -160,7 +162,7 @@ body.theme-makan{--bg:#eefaf0;--panel:#ffffff;--text:#223a28;--muted:#5c7c64;--a
 
     <div class="field">
       <label for="message">Pesan (opsional)</label>
-      <textarea id="message" name="message" maxlength="360" placeholder="Pesan kesan dan sarannya..."></textarea>
+      <textarea id="message" name="message" maxlength="240" placeholder="Pesan kesan dan sarannya..."></textarea>
     </div>
 
     <div class="field">
@@ -189,7 +191,6 @@ body.theme-makan{--bg:#eefaf0;--panel:#ffffff;--text:#223a28;--muted:#5c7c64;--a
     <button type="button" id="againBtn">Kirim lagi</button>
   </div>
 </div>
-<footer>Dengan mengirim, kamu menyetujui link dan pesan ditampilkan sesuai moderasi livestream.</footer>
 </main>
 
 <!-- Ganti dua nilai di bawah dengan Project URL dan anon/publishable key Supabase.
@@ -220,11 +221,16 @@ body.theme-makan{--bg:#eefaf0;--panel:#ffffff;--text:#223a28;--muted:#5c7c64;--a
   const againBtn = document.getElementById("againBtn");
 
   const REACTION_META = {
-    senyum: { emoji: "😊", theme: "theme-senyum", note: "Karena senyummu, kamu membuat hidup lebih indah." },
-    ketawa: { emoji: "😂", theme: "theme-ketawa", note: "Orang yang bijaksana, tertawa demi kebaikan bersama; orang yang bodoh, tertawa untuk meremehkan orang lain." },
-    nangis: { emoji: "😭", theme: "theme-nangis", note: "😭 😭 😭" },
-    makan:  { emoji: "🍜", theme: "theme-makan",  note: "Tidak ada yang lebih mendesak, tidak ada yang lebih genting daripada perut lapar." }
+    senyum: { emoji: "😊", theme: "theme-senyum", notes: ["Karena senyummu, kamu membuat hidup lebih indah."] },
+    ketawa: { emoji: "😂", theme: "theme-ketawa", notes: ["Orang yang bijaksana, tertawa demi kebaikan bersama; orang yang bodoh, tertawa untuk meremehkan orang lain."] },
+    nangis: { emoji: "😭", theme: "theme-nangis", notes: ["😭 😭 😭", "😭" ] },
+    makan:  { emoji: "🍜", theme: "theme-makan",  notes: ["Tidak ada yang lebih mendesak, tidak ada yang lebih genting daripada perut lapar."] }
   };
+
+  function pickNote(meta) {
+    const notes = meta.notes;
+    return notes[Math.floor(Math.random() * notes.length)];
+  }
   const ALL_THEMES = Object.values(REACTION_META).map(m => m.theme);
 
   let selectedReaction = null;
@@ -273,8 +279,17 @@ body.theme-makan{--bg:#eefaf0;--panel:#ffffff;--text:#223a28;--muted:#5c7c64;--a
     urlInput.classList.remove("url-ok", "url-bad");
   }
 
+  function normalizeUrlInput() {
+    let v = urlInput.value.trim();
+    if (v && !/^[a-z][a-z0-9+.-]*:\/\//i.test(v)) {
+      v = "https://" + v;
+      urlInput.value = v;
+    }
+    return v;
+  }
+
   function runCheck() {
-    const result = parseAndRecognizeUrl(urlInput.value);
+    const result = parseAndRecognizeUrl(normalizeUrlInput());
     checkedUrl = "";
     clearUrlStatus();
     if (!result.ok) {
@@ -335,7 +350,7 @@ body.theme-makan{--bg:#eefaf0;--panel:#ffffff;--text:#223a28;--muted:#5c7c64;--a
     const meta = REACTION_META[selectedReaction] || REACTION_META.senyum;
     thanksEmoji.textContent = meta.emoji;
     thanksTitle.textContent = "Terkirim!";
-    thanksMsg.textContent = "Terima Kasih ✨\n" + meta.note + "\nTunggu live berikutnya ya ✨";
+    thanksMsg.textContent = "Terima Kasih ✨\n" + pickNote(meta) + "\nTunggu live berikutnya ya ✨";
     setTheme(meta.theme);
     form.classList.add("hidden");
     thanksView.classList.remove("hidden");

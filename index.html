@@ -220,10 +220,10 @@ body.theme-makan{--bg:#eefaf0;--panel:#ffffff;--text:#223a28;--muted:#5c7c64;--a
   const againBtn = document.getElementById("againBtn");
 
   const REACTION_META = {
-    senyum: { emoji: "😊", theme: "theme-senyum", note: "Makasih udah mampir." },
-    ketawa: { emoji: "😂", theme: "theme-ketawa", note: "Makasih, semoga beneran lucu ya." },
-    nangis: { emoji: "😭", theme: "theme-nangis", note: "Makasih udah berbagi, peluk dulu." },
-    makan:  { emoji: "🍜", theme: "theme-makan",  note: "Makasih, jangan lupa makan juga." }
+    senyum: { emoji: "😊", theme: "theme-senyum", note: "Karena senyummu, kamu membuat hidup lebih indah." },
+    ketawa: { emoji: "😂", theme: "theme-ketawa", note: "Orang yang bijaksana, tertawa demi kebaikan bersama; orang yang bodoh, tertawa untuk meremehkan orang lain." },
+    nangis: { emoji: "😭", theme: "theme-nangis", note: "😭 😭 😭" },
+    makan:  { emoji: "🍜", theme: "theme-makan",  note: "Tidak ada yang lebih mendesak, tidak ada yang lebih genting daripada perut lapar." }
   };
   const ALL_THEMES = Object.values(REACTION_META).map(m => m.theme);
 
@@ -335,7 +335,7 @@ body.theme-makan{--bg:#eefaf0;--panel:#ffffff;--text:#223a28;--muted:#5c7c64;--a
     const meta = REACTION_META[selectedReaction] || REACTION_META.senyum;
     thanksEmoji.textContent = meta.emoji;
     thanksTitle.textContent = "Terkirim!";
-    thanksMsg.textContent = meta.note + " Sampai ketemu di live berikutnya ✨";
+    thanksMsg.textContent = "Terima Kasih ✨\n" + meta.note + "\nTunggu live berikutnya ya ✨";
     setTheme(meta.theme);
     form.classList.add("hidden");
     thanksView.classList.remove("hidden");
